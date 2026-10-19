@@ -1,0 +1,80 @@
+﻿@using ArtemisBank.Core.Application.DTOs
+@model CreditCardDto
+
+@{
+    ViewData["Title"] = "Detalle de Tarjeta";
+}
+
+@section NavLinks {
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Client" asp-action="Index">Home</a>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link text-white dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            Transacciones
+        </a>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" asp-controller="Client" asp-action="ExpressTransaction">Express</a></li>
+            <li><a class="dropdown-item" asp-controller="Client" asp-action="CardPayment">Tarjeta de crédito</a></li>
+            <li><a class="dropdown-item" asp-controller="Client" asp-action="LoanPayment">Préstamo</a></li>
+            <li><a class="dropdown-item" asp-controller="Client" asp-action="BeneficiaryTransaction">Beneficiarios</a></li>
+        </ul>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Client" asp-action="Beneficiaries">Beneficiarios</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Client" asp-action="CashAdvance">Avance de efectivo</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Client" asp-action="TransferBetweenAccounts">Transferencia</a>
+    </li>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold" style="color: #1a3a6b;">Consumos de Tarjeta</h3>
+    <a asp-controller="Client" asp-action="Index" class="btn btn-outline-secondary">← Volver</a>
+</div>
+
+<div class="alert" style="background-color: #e8f0fe; border-left: 4px solid #1a3a6b;">
+    <strong>No. Tarjeta:</strong> **** @Model.CardNumber.Substring(Model.CardNumber.Length - 4) &nbsp;|&nbsp;
+    <strong>Límite:</strong> RD$ @Model.CreditLimit.ToString("N2") &nbsp;|&nbsp;
+    <strong>Deuda:</strong> RD$ @Model.AmountOwed.ToString("N2") &nbsp;|&nbsp;
+    <strong>Expiración:</strong> @Model.ExpirationDate
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table table-hover align-middle">
+            <thead style="background: linear-gradient(135deg, #0a1628, #1a3a6b); color: white;">
+                <tr>
+                    <th>Fecha</th>
+                    <th>Monto</th>
+                    <th>Comercio</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Consumptions.Any())
+                {
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">No hay consumos registrados.</td>
+                    </tr>
+                }
+                @foreach (var consumption in Model.Consumptions)
+                {
+                    <tr>
+                        <td>@consumption.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>RD$ @consumption.Amount.ToString("N2")</td>
+                        <td>@consumption.Commerce</td>
+                        <td>
+                            <span class="badge @(consumption.Status == "Aprobado" ? "bg-success" : "bg-danger")">
+                                @consumption.Status.ToUpper()
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

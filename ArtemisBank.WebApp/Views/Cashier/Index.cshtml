@@ -1,0 +1,66 @@
+﻿@model CashierDashboardViewModel
+
+@{
+    ViewData["Title"] = "Panel del Cajero";
+}
+
+@section NavLinks {
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Cashier" asp-action="Index">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Cashier" asp-action="Deposit">Depósito</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Cashier" asp-action="Withdrawal">Retiro</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Cashier" asp-action="CreditCardPayment">Pago Tarjeta</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Cashier" asp-action="LoanPayment">Pago Préstamo</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Cashier" asp-action="ThirdPartyTransfer">Transferencia</a>
+    </li>
+}
+
+<div class="mb-4">
+    <h3 class="fw-bold" style="color: #1a3a6b;">Panel del Cajero</h3>
+    <p class="text-muted">Resumen de operaciones del día</p>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body" style="border-left: 4px solid #1a3a6b;">
+                <p class="text-muted small mb-1">Transacciones Hoy</p>
+                <h3 class="fw-bold" style="color: #1a3a6b;">@Model.TodayTransactions</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body" style="border-left: 4px solid #2196F3;">
+                <p class="text-muted small mb-1">Pagos Hoy</p>
+                <h3 class="fw-bold" style="color: #2196F3;">@Model.TodayPayments</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body" style="border-left: 4px solid #28a745;">
+                <p class="text-muted small mb-1">Depósitos Hoy</p>
+                <h3 class="fw-bold text-success">@Model.TodayDeposits</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body" style="border-left: 4px solid #dc3545;">
+                <p class="text-muted small mb-1">Retiros Hoy</p>
+                <h3 class="fw-bold text-danger">@Model.TodayWithdrawals</h3>
+            </div>
+        </div>
+    </div>
+</div>

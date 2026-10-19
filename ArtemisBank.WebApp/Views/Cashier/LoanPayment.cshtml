@@ -1,0 +1,69 @@
+﻿@model LoanPaymentViewModel
+
+@{
+    ViewData["Title"] = "Pago a Préstamo";
+}
+
+@section NavLinks {
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Cashier" asp-action="Index">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Cashier" asp-action="Deposit">Depósito</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Cashier" asp-action="Withdrawal">Retiro</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Cashier" asp-action="CreditCardPayment">Pago Tarjeta</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Cashier" asp-action="LoanPayment">Pago Préstamo</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Cashier" asp-action="ThirdPartyTransfer">Transferencia</a>
+    </li>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold" style="color: #1a3a6b;">Pago a Préstamo</h3>
+    <a asp-controller="Cashier" asp-action="Index" class="btn btn-outline-secondary">← Volver</a>
+</div>
+
+@if (Model.HasError)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in Model.Errors)
+        {
+            <p class="mb-0">⚠ @error</p>
+        }
+    </div>
+}
+
+<div class="card shadow-sm">
+    <div class="card-body p-4">
+        <form asp-controller="Cashier" asp-action="LoanPayment" method="post">
+            <div class="mb-3">
+                <label asp-for="AccountNumber" class="form-label fw-semibold">Número de Cuenta Origen</label>
+                <input asp-for="AccountNumber" class="form-control" placeholder="Ingrese el número de cuenta" />
+                <span asp-validation-for="AccountNumber" class="text-danger small"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="LoanNumber" class="form-label fw-semibold">Número de Préstamo</label>
+                <input asp-for="LoanNumber" class="form-control" placeholder="Ingrese los 9 dígitos" />
+                <span asp-validation-for="LoanNumber" class="text-danger small"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Amount" class="form-label fw-semibold">Monto a Pagar</label>
+                <input asp-for="Amount" type="number" step="any" class="form-control" placeholder="0.00" />
+                <span asp-validation-for="Amount" class="text-danger small"></span>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+                <a asp-controller="Cashier" asp-action="Index" class="btn btn-outline-secondary me-2">Cancelar</a>
+                <button type="submit" class="btn text-white" style="background: linear-gradient(135deg, #1a3a6b, #2196F3);">
+                    Continuar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

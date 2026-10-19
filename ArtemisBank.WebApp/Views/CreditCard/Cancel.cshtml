@@ -1,0 +1,57 @@
+﻿@model CancelCreditCardViewModel
+
+@{
+    ViewData["Title"] = "Cancelar Tarjeta";
+}
+
+@section NavLinks {
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Admin" asp-action="Index">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Admin" asp-action="UserList">Gestión de Usuarios</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Loan" asp-action="Index">Gestión de Préstamos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="CreditCard" asp-action="Index">Gestión de Tarjetas</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="SavingsAccount" asp-action="Index">Gestión de Cuentas</a>
+    </li>
+}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold" style="color: #1a3a6b;">Cancelar Tarjeta</h3>
+    <a asp-controller="CreditCard" asp-action="Index" class="btn btn-outline-secondary">← Volver</a>
+</div>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<div class="card shadow-sm border-danger">
+    <div class="card-body p-4">
+        <h5 class="fw-bold text-danger">¿Está seguro que desea cancelar la tarjeta @Model.CardNumber.Substring(Model.CardNumber.Length - 4)?</h5>
+        <p class="text-muted">Esta acción no se puede deshacer. La tarjeta quedará cancelada y no podrá usarse.</p>
+
+        @if (Model.AmountOwed > 0)
+        {
+            <div class="alert alert-warning">
+                ⚠ Esta tarjeta tiene una deuda pendiente de RD$ @Model.AmountOwed.ToString("N2").
+                El cliente debe saldar la totalidad antes de cancelarla.
+            </div>
+        }
+
+        <div class="d-flex gap-2 mt-3">
+            <form asp-controller="CreditCard" asp-action="ConfirmCancel" method="post">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CardNumber" />
+                <input type="hidden" asp-for="AmountOwed" />
+                <button type="submit" class="btn btn-danger">Aceptar</button>
+            </form>
+            <a asp-controller="CreditCard" asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+    </div>
+</div>

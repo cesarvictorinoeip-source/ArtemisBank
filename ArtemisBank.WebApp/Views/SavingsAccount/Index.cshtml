@@ -1,0 +1,134 @@
+﻿@model List<SavingsAccountViewModel>
+
+@{
+    ViewData["Title"] = "Gestión de Cuentas de Ahorro";
+    var totalPages = (int)ViewBag.TotalPages;
+    var currentPage = (int)ViewBag.CurrentPage;
+    var statusFilter = (string)ViewBag.StatusFilter;
+    var typeFilter = (string)ViewBag.TypeFilter;
+    var searchIdCard = (string)ViewBag.SearchIdCard;
+}
+
+@section NavLinks {
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Admin" asp-action="Index">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Admin" asp-action="UserList">Gestión de Usuarios</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Loan" asp-action="Index">Gestión de Préstamos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="CreditCard" asp-action="Index">Gestión de Tarjetas</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="SavingsAccount" asp-action="Index">Gestión de Cuentas</a>
+    </li>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold" style="color: #1a3a6b;">Gestión de Cuentas de Ahorro</h3>
+    <a asp-controller="SavingsAccount" asp-action="AssignAccount" class="btn text-white" style="background: linear-gradient(135deg, #1a3a6b, #2196F3); border: none;">
+        + Asignar Cuenta
+    </a>
+</div>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<div class="row mb-3">
+    <div class="col-md-4">
+        <form method="get" class="d-flex gap-2">
+            <input type="text" name="idcard" value="@searchIdCard" class="form-control" placeholder="Buscar por cédula..." />
+            <input type="hidden" name="status" value="@statusFilter" />
+            <input type="hidden" name="type" value="@typeFilter" />
+            <button type="submit" class="btn btn-outline-primary">Buscar</button>
+        </form>
+    </div>
+    <div class="col-md-3">
+        <select class="form-select" onchange="filterByStatus(this.value)">
+            <option value="">Todos los estados</option>
+            <option value="activas" selected="@(statusFilter == "activas")">Activas</option>
+            <option value="canceladas" selected="@(statusFilter == "canceladas")">Canceladas</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <select class="form-select" onchange="filterByType(this.value)">
+            <option value="">Todos los tipos</option>
+            <option value="principal" selected="@(typeFilter == "principal")">Principal</option>
+            <option value="secundaria" selected="@(typeFilter == "secundaria")">Secundaria</option>
+        </select>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table table-hover align-middle">
+            <thead style="background: linear-gradient(135deg, #0a1628, #1a3a6b); color: white;">
+                <tr>
+                    <th>No. Cuenta</th>
+                    <th>Cliente</th>
+                    <th>Balance</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var account in Model)
+                {
+                    <tr>
+                        <td>@account.AccountNumber</td>
+                        <td>@account.OwnerFullName</td>
+                        <td>RD$ @account.Balance.ToString("N2")</td>
+                        <td>
+                            <span class="badge" style="background-color: #1a3a6b;">
+                                @(account.IsPrimary ? "Principal" : "Secundaria")
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge @(account.IsActive ? "bg-success" : "bg-danger")">
+                                @(account.IsActive ? "Activa" : "Cancelada")
+                            </span>
+                        </td>
+                        <td>
+                            <a asp-controller="SavingsAccount" asp-action="Details" asp-route-id="@account.Id" class="btn btn-sm btn-outline-primary">Ver</a>
+                            @if (!account.IsPrimary && account.IsActive)
+                            {
+                                <a asp-controller="SavingsAccount" asp-action="Cancel" asp-route-id="@account.Id" class="btn btn-sm btn-outline-danger ms-1">Cancelar</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @if (totalPages > 1)
+        {
+            <nav class="mt-3">
+                <ul class="pagination justify-content-center">
+                    @for (int i = 1; i <= totalPages; i++)
+                    {
+                        <li class="page-item @(i == currentPage ? "active" : "")">
+                            <a class="page-link" href="?page=@i&status=@statusFilter&type=@typeFilter&idcard=@searchIdCard">@i</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function filterByStatus(status) {
+            window.location.href = '?status=' + status + '&page=1&type=@typeFilter&idcard=@searchIdCard';
+        }
+        function filterByType(type) {
+            window.location.href = '?type=' + type + '&page=1&status=@statusFilter&idcard=@searchIdCard';
+        }
+    </script>
+}

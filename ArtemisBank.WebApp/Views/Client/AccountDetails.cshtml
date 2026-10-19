@@ -1,0 +1,87 @@
+﻿@using ArtemisBank.Core.Application.DTOs
+@model SavingsAccountDto
+
+@{
+    ViewData["Title"] = "Detalle de Cuenta";
+}
+
+@section NavLinks {
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Client" asp-action="Index">Home</a>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link text-white dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            Transacciones
+        </a>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" asp-controller="Client" asp-action="ExpressTransaction">Express</a></li>
+            <li><a class="dropdown-item" asp-controller="Client" asp-action="CardPayment">Tarjeta de crédito</a></li>
+            <li><a class="dropdown-item" asp-controller="Client" asp-action="LoanPayment">Préstamo</a></li>
+            <li><a class="dropdown-item" asp-controller="Client" asp-action="BeneficiaryTransaction">Beneficiarios</a></li>
+        </ul>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Client" asp-action="Beneficiaries">Beneficiarios</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Client" asp-action="CashAdvance">Avance de efectivo</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Client" asp-action="TransferBetweenAccounts">Transferencia</a>
+    </li>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold" style="color: #1a3a6b;">Transacciones de la Cuenta</h3>
+    <a asp-controller="Client" asp-action="Index" class="btn btn-outline-secondary">← Volver</a>
+</div>
+
+<div class="alert" style="background-color: #e8f0fe; border-left: 4px solid #1a3a6b;">
+    <strong>No. Cuenta:</strong> @Model.AccountNumber &nbsp;|&nbsp;
+    <strong>Balance:</strong> RD$ @Model.Balance.ToString("N2") &nbsp;|&nbsp;
+    <strong>Tipo:</strong> @(Model.IsPrimary ? "Principal" : "Secundaria")
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table table-hover align-middle">
+            <thead style="background: linear-gradient(135deg, #0a1628, #1a3a6b); color: white;">
+                <tr>
+                    <th>Fecha</th>
+                    <th>Monto</th>
+                    <th>Tipo</th>
+                    <th>Beneficiario</th>
+                    <th>Origen</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Transactions.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">No hay transacciones registradas.</td>
+                    </tr>
+                }
+                @foreach (var transaction in Model.Transactions)
+                {
+                    <tr>
+                        <td>@transaction.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>RD$ @transaction.Amount.ToString("N2")</td>
+                        <td>
+                            <span class="badge @(transaction.Type == "Credito" ? "bg-success" : "bg-warning text-dark")">
+                                @(transaction.Type == "Credito" ? "CRÉDITO" : "DÉBITO")
+                            </span>
+                        </td>
+                        <td>@transaction.Beneficiary</td>
+                        <td>@transaction.Origin</td>
+                        <td>
+                            <span class="badge @(transaction.Status == "Aprobada" ? "bg-success" : "bg-danger")">
+                                @transaction.Status.ToUpper()
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

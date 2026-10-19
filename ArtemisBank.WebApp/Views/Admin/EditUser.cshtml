@@ -1,0 +1,112 @@
+﻿@model SaveUserViewModel
+
+@{
+    ViewData["Title"] = "Editar Usuario";
+}
+
+@section NavLinks {
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Admin" asp-action="Index">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Admin" asp-action="UserList">Gestión de Usuarios</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Loan" asp-action="Index">Gestión de Préstamos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="CreditCard" asp-action="Index">Gestión de Tarjetas</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="SavingsAccount" asp-action="Index">Gestión de Cuentas</a>
+    </li>
+}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold" style="color: #1a3a6b;">Editar Usuario</h3>
+    <a asp-controller="Admin" asp-action="UserList" class="btn btn-outline-secondary">← Volver</a>
+</div>
+
+@if (Model.HasError)
+{
+    <div class="alert alert-danger rounded-3">
+        @foreach (var error in Model.Errors)
+        {
+            <p class="mb-0">⚠ @error</p>
+        }
+    </div>
+}
+
+<div class="card shadow-sm">
+    <div class="card-body p-4">
+        <form asp-controller="Admin" asp-action="EditUser" method="post">
+            <input asp-for="Id" type="hidden" />
+            <input asp-for="UserType" type="hidden" />
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="FirstName" class="form-label fw-semibold">Nombre</label>
+                    <input asp-for="FirstName" class="form-control" placeholder="Ingrese el nombre" />
+                    <span asp-validation-for="FirstName" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="LastName" class="form-label fw-semibold">Apellido</label>
+                    <input asp-for="LastName" class="form-control" placeholder="Ingrese el apellido" />
+                    <span asp-validation-for="LastName" class="text-danger small"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="IdCard" class="form-label fw-semibold">Cédula</label>
+                    <input asp-for="IdCard" class="form-control" placeholder="Ingrese la cédula" />
+                    <span asp-validation-for="IdCard" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Email" class="form-label fw-semibold">Correo</label>
+                    <input asp-for="Email" class="form-control" placeholder="Ingrese el correo" />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="UserName" class="form-label fw-semibold">Usuario</label>
+                    <input asp-for="UserName" class="form-control" placeholder="Ingrese el usuario" />
+                    <span asp-validation-for="UserName" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Tipo de Usuario</label>
+                    <input type="text" class="form-control" value="@Model.UserType" disabled />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Password" class="form-label fw-semibold">Nueva Contraseña</label>
+                    <input asp-for="Password" class="form-control" placeholder="Dejar vacío para no cambiar" />
+                    <span asp-validation-for="Password" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="ConfirmPassword" class="form-label fw-semibold">Confirmar Contraseña</label>
+                    <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirme la nueva contraseña" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                </div>
+            </div>
+
+            @if (Model.UserType == "Cliente")
+            {
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="AdditionalAmount" class="form-label fw-semibold">Monto Adicional</label>
+                        <input asp-for="AdditionalAmount" class="form-control" placeholder="0.00" />
+                        <small class="text-muted">Este monto se sumará al saldo de la cuenta principal del cliente.</small>
+                        <span asp-validation-for="AdditionalAmount" class="text-danger small"></span>
+                    </div>
+                </div>
+            }
+
+            <div class="d-flex justify-content-end mt-3">
+                <a asp-controller="Admin" asp-action="UserList" class="btn btn-outline-secondary me-2">Cancelar</a>
+                <button type="submit" class="btn text-white" style="background: linear-gradient(135deg, #1a3a6b, #2196F3);">
+                    Guardar Cambios
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

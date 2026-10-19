@@ -1,0 +1,49 @@
+﻿@model DepositViewModel
+
+@{
+    ViewData["Title"] = "Confirmar Depósito";
+}
+
+@section NavLinks {
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Cashier" asp-action="Index">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Cashier" asp-action="Deposit">Depósito</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Cashier" asp-action="Withdrawal">Retiro</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Cashier" asp-action="CreditCardPayment">Pago Tarjeta</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Cashier" asp-action="LoanPayment">Pago Préstamo</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Cashier" asp-action="ThirdPartyTransfer">Transferencia</a>
+    </li>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold" style="color: #1a3a6b;">Confirmar Depósito</h3>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-4">
+        <div class="alert" style="background-color: #e8f0fe; border-left: 4px solid #1a3a6b;">
+            <p><strong>Titular:</strong> @Model.OwnerFullName</p>
+            <p><strong>Cuenta Destino:</strong> @Model.AccountNumber</p>
+            <p class="mb-0"><strong>Monto:</strong> RD$ @Model.Amount.ToString("N2")</p>
+        </div>
+        <p class="text-muted">¿Está seguro que desea realizar este depósito?</p>
+        <div class="d-flex gap-2 mt-3">
+            <form asp-controller="Cashier" asp-action="ProcessDeposit" method="post">
+                <button type="submit" class="btn text-white" style="background: linear-gradient(135deg, #1a3a6b, #2196F3);">
+                    Confirmar
+                </button>
+            </form>
+            <a asp-controller="Cashier" asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+    </div>
+</div>

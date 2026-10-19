@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Advertencia de Riesgo";
+}
+
+@section NavLinks {
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Admin" asp-action="Index">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Admin" asp-action="UserList">Gestión de Usuarios</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Loan" asp-action="Index">Gestión de Préstamos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="CreditCard" asp-action="Index">Gestión de Tarjetas</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="SavingsAccount" asp-action="Index">Gestión de Cuentas</a>
+    </li>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold" style="color: #1a3a6b;">⚠ Advertencia de Riesgo</h3>
+</div>
+
+<div class="card shadow-sm border-danger">
+    <div class="card-body p-4">
+        <div class="alert alert-warning">
+            <h5 class="fw-bold">⚠ Cliente de Alto Riesgo</h5>
+            <p class="mb-0">@ViewBag.RiskMessage</p>
+        </div>
+
+        <p class="text-muted">¿Desea continuar con la asignación del préstamo de todas formas?</p>
+
+        <div class="d-flex gap-2 mt-3">
+            <a href="c:\users\cesar tomas\artemisbank\artemisbank.webapp\views\loan\riskwarning.cshtml">c:\users\cesar tomas\artemisbank\artemisbank.webapp\views\loan\riskwarning.cshtml</a>
+            <form asp-controller="Loan" asp-action="ConfirmRiskyLoan" method="post">
+                <button type="submit" class="btn text-white" style="background: linear-gradient(135deg, #1a3a6b, #2196F3);">
+                    Sí, confirmar asignación
+                </button>
+            </form>
+            <a asp-controller="Loan" asp-action="Index" class="btn btn-outline-danger">
+                Cancelar
+            </a>
+        </div>
+    </div>
+</div>

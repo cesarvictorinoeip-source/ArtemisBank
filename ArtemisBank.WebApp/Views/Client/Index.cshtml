@@ -1,0 +1,137 @@
+﻿@model ClientDashboardViewModel
+
+@{
+    ViewData["Title"] = "Mi Panel";
+}
+
+@section NavLinks {
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Client" asp-action="Index">Home</a>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link text-white dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            Transacciones
+        </a>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" asp-controller="Client" asp-action="ExpressTransaction">Express</a></li>
+            <li><a class="dropdown-item" asp-controller="Client" asp-action="CardPayment">Tarjeta de crédito</a></li>
+            <li><a class="dropdown-item" asp-controller="Client" asp-action="LoanPayment">Préstamo</a></li>
+            <li><a class="dropdown-item" asp-controller="Client" asp-action="BeneficiaryTransaction">Beneficiarios</a></li>
+        </ul>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Client" asp-action="Beneficiaries">Beneficiarios</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Client" asp-action="CashAdvance">Avance de efectivo</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Client" asp-action="TransferBetweenAccounts">Transferencia</a>
+    </li>
+}
+
+<div class="mb-4">
+    <h3 class="fw-bold" style="color: #1a3a6b;">Mis Productos Financieros</h3>
+</div>
+
+<!-- Cuentas de Ahorro -->
+<h5 class="fw-bold mb-3" style="color: #1a3a6b;">Cuentas de Ahorro</h5>
+<div class="row g-3 mb-4">
+    @foreach (var account in Model.SavingsAccounts)
+    {
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body" style="border-left: 4px solid #1a3a6b;">
+                    <p class="text-muted small mb-1">No. Cuenta</p>
+                    <h6 class="fw-bold">@account.AccountNumber</h6>
+                    <p class="text-muted small mb-1">Balance</p>
+                    <h5 class="fw-bold" style="color: #1a3a6b;">RD$ @account.Balance.ToString("N2")</h5>
+                    <span class="badge" style="background-color: #1a3a6b;">
+                        @(account.IsPrimary ? "Principal" : "Secundaria")
+                    </span>
+                    <div class="mt-3">
+                        <a asp-controller="Client" asp-action="AccountDetails" asp-route-id="@account.Id"
+                           class="btn btn-sm btn-outline-primary">Ver detalles</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Préstamos -->
+@if (Model.Loans.Any())
+{
+    <h5 class="fw-bold mb-3" style="color: #1a3a6b;">Préstamos Activos</h5>
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <table class="table table-hover align-middle">
+                <thead style="background: linear-gradient(135deg, #0a1628, #1a3a6b); color: white;">
+                    <tr>
+                        <th>No. Préstamo</th>
+                        <th>Monto</th>
+                        <th>Cuotas</th>
+                        <th>Pagadas</th>
+                        <th>Pendiente</th>
+                        <th>Tasa</th>
+                        <th>Plazo</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var loan in Model.Loans)
+                    {
+                        <tr>
+                            <td>@loan.LoanNumber</td>
+                            <td>RD$ @loan.Amount.ToString("N2")</td>
+                            <td>@loan.TotalInstallments</td>
+                            <td>@loan.PaidInstallments</td>
+                            <td>RD$ @loan.PendingAmount.ToString("N2")</td>
+                            <td>@loan.InterestRate%</td>
+                            <td>@loan.TermMonths meses</td>
+                            <td>
+                                <span class="badge @(loan.IsLate ? "bg-danger" : "bg-success")">
+                                    @(loan.IsLate ? "En mora" : "Al día")
+                                </span>
+                            </td>
+                            <td>
+                                <a asp-controller="Client" asp-action="LoanDetails" asp-route-id="@loan.Id"
+                                   class="btn btn-sm btn-outline-primary">Ver</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+<!-- Tarjetas de Crédito -->
+@if (Model.CreditCards.Any())
+{
+    <h5 class="fw-bold mb-3" style="color: #1a3a6b;">Tarjetas de Crédito Activas</h5>
+    <div class="row g-3">
+        @foreach (var card in Model.CreditCards)
+        {
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body" style="border-left: 4px solid #2196F3;">
+                        <p class="text-muted small mb-1">No. Tarjeta</p>
+                        <h6 class="fw-bold">**** @card.CardNumber.Substring(card.CardNumber.Length - 4)</h6>
+                        <p class="text-muted small mb-1">Límite</p>
+                        <h6>RD$ @card.CreditLimit.ToString("N2")</h6>
+                        <p class="text-muted small mb-1">Deuda</p>
+                        <h5 class="fw-bold text-danger">RD$ @card.AmountOwed.ToString("N2")</h5>
+                        <p class="text-muted small mb-1">Expiración</p>
+                        <h6>@card.ExpirationDate</h6>
+                        <div class="mt-3">
+                            <a asp-controller="Client" asp-action="CardDetails" asp-route-id="@card.Id"
+                               class="btn btn-sm btn-outline-primary">Ver detalles</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

@@ -1,0 +1,91 @@
+﻿@using ArtemisBank.Core.Application.ViewModels
+@model TransferBetweenAccountsViewModel
+
+@{
+    ViewData["Title"] = "Transferencia entre Cuentas";
+}
+
+@section NavLinks {
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Client" asp-action="Index">Home</a>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link text-white dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            Transacciones
+        </a>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" asp-controller="Client" asp-action="ExpressTransaction">Express</a></li>
+            <li><a class="dropdown-item" asp-controller="Client" asp-action="CardPayment">Tarjeta de crédito</a></li>
+            <li><a class="dropdown-item" asp-controller="Client" asp-action="LoanPayment">Préstamo</a></li>
+            <li><a class="dropdown-item" asp-controller="Client" asp-action="BeneficiaryTransaction">Beneficiarios</a></li>
+        </ul>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Client" asp-action="Beneficiaries">Beneficiarios</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Client" asp-action="CashAdvance">Avance de efectivo</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Client" asp-action="TransferBetweenAccounts">Transferencia</a>
+    </li>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold" style="color: #1a3a6b;">Transferencia entre Cuentas</h3>
+    <a asp-controller="Client" asp-action="Index" class="btn btn-outline-secondary">← Volver</a>
+</div>
+
+@if (Model.HasError)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in Model.Errors)
+        {
+            <p class="mb-0">⚠ @error</p>
+        }
+    </div>
+}
+
+<div class="card shadow-sm">
+    <div class="card-body p-4">
+        <form asp-controller="Client" asp-action="TransferBetweenAccounts" method="post">
+            <div class="mb-3">
+                <label asp-for="OriginAccountId" class="form-label fw-semibold">Cuenta de Origen</label>
+                <select asp-for="OriginAccountId" class="form-select">
+                    <option value="">Seleccione una cuenta...</option>
+                    @foreach (var account in Model.Accounts)
+                    {
+                        <option value="@account.Id">
+                            @account.AccountNumber - RD$ @account.Balance.ToString("N2") @(account.IsPrimary ? "(Principal)" : "")
+                        </option>
+                    }
+                </select>
+                <span asp-validation-for="OriginAccountId" class="text-danger small"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DestinationAccountId" class="form-label fw-semibold">Cuenta de Destino</label>
+                <select asp-for="DestinationAccountId" class="form-select">
+                    <option value="">Seleccione una cuenta...</option>
+                    @foreach (var account in Model.Accounts)
+                    {
+                        <option value="@account.Id">
+                            @account.AccountNumber - RD$ @account.Balance.ToString("N2") @(account.IsPrimary ? "(Principal)" : "")
+                        </option>
+                    }
+                </select>
+                <span asp-validation-for="DestinationAccountId" class="text-danger small"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Amount" class="form-label fw-semibold">Monto a Transferir</label>
+                <input asp-for="Amount" type="number" step="any" class="form-control" placeholder="0.00" />
+                <span asp-validation-for="Amount" class="text-danger small"></span>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+                <a asp-controller="Client" asp-action="Index" class="btn btn-outline-secondary me-2">Cancelar</a>
+                <button type="submit" class="btn text-white" style="background: linear-gradient(135deg, #1a3a6b, #2196F3);">
+                    Transferir
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

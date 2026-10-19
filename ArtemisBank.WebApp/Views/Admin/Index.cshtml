@@ -1,0 +1,119 @@
+﻿@model AdminDashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+@section NavLinks {
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Admin" asp-action="Index">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Admin" asp-action="UserList">Gestión de Usuarios</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Loan" asp-action="Index">Gestión de Préstamos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="CreditCard" asp-action="Index">Gestión de Tarjetas</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="SavingsAccount" asp-action="Index">Gestión de Cuentas</a>
+    </li>
+}
+
+<div class="mb-4">
+    <h3 class="fw-bold" style="color: #1a3a6b;">Dashboard</h3>
+    <p class="text-muted">Resumen general del sistema</p>
+</div>
+
+<div class="row g-3">
+
+    <!-- Transacciones -->
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body" style="border-left: 4px solid #1a3a6b;">
+                <p class="text-muted small mb-1">Transacciones Hoy</p>
+                <h3 class="fw-bold" style="color: #1a3a6b;">@Model.TodayTransactions</h3>
+                <p class="text-muted small mb-0">Total: @Model.TotalTransactions</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagos -->
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body" style="border-left: 4px solid #2196F3;">
+                <p class="text-muted small mb-1">Pagos Hoy</p>
+                <h3 class="fw-bold" style="color: #2196F3;">@Model.TodayPayments</h3>
+                <p class="text-muted small mb-0">Total: @Model.TotalPayments</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clientes Activos -->
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body" style="border-left: 4px solid #28a745;">
+                <p class="text-muted small mb-1">Clientes Activos</p>
+                <h3 class="fw-bold text-success">@Model.ActiveClients</h3>
+                <p class="text-muted small mb-0">Inactivos: @Model.InactiveClients</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deuda Promedio -->
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body" style="border-left: 4px solid #dc3545;">
+                <p class="text-muted small mb-1">Deuda Promedio</p>
+                <h3 class="fw-bold text-danger">RD$ @Model.AverageDebtPerClient.ToString("N2")</h3>
+                <p class="text-muted small mb-0">Por cliente activo</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Productos Financieros -->
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body" style="border-left: 4px solid #0d2b55;">
+                <p class="text-muted small mb-1">Total Productos</p>
+                <h3 class="fw-bold" style="color: #0d2b55;">@Model.TotalFinancialProducts</h3>
+                <p class="text-muted small mb-0">Asignados a clientes</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Préstamos -->
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body" style="border-left: 4px solid #ff9800;">
+                <p class="text-muted small mb-1">Préstamos Vigentes</p>
+                <h3 class="fw-bold" style="color: #ff9800;">@Model.TotalLoans</h3>
+                <p class="text-muted small mb-0">Activos en el sistema</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tarjetas -->
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body" style="border-left: 4px solid #9c27b0;">
+                <p class="text-muted small mb-1">Tarjetas de Crédito</p>
+                <h3 class="fw-bold" style="color: #9c27b0;">@Model.TotalCreditCards</h3>
+                <p class="text-muted small mb-0">Activas en el sistema</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cuentas de Ahorro -->
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body" style="border-left: 4px solid #00bcd4;">
+                <p class="text-muted small mb-1">Cuentas de Ahorro</p>
+                <h3 class="fw-bold" style="color: #00bcd4;">@Model.TotalSavingsAccounts</h3>
+                <p class="text-muted small mb-0">Abiertas en el sistema</p>
+            </div>
+        </div>
+    </div>
+
+</div>

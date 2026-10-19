@@ -1,0 +1,64 @@
+﻿@model CreditCardFormViewModel
+
+@{
+    ViewData["Title"] = "Configurar Tarjeta de Crédito";
+}
+
+@section NavLinks {
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Admin" asp-action="Index">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Admin" asp-action="UserList">Gestión de Usuarios</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Loan" asp-action="Index">Gestión de Préstamos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="CreditCard" asp-action="Index">Gestión de Tarjetas</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="SavingsAccount" asp-action="Index">Gestión de Cuentas</a>
+    </li>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold" style="color: #1a3a6b;">Configurar Tarjeta de Crédito</h3>
+    <a asp-controller="CreditCard" asp-action="AssignCard" class="btn btn-outline-secondary">← Volver</a>
+</div>
+
+<div class="alert" style="background-color: #e8f0fe; border-left: 4px solid #1a3a6b;">
+    <strong>Cliente:</strong> @Model.ClientName
+</div>
+
+@if (Model.HasError)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in Model.Errors)
+        {
+            <p class="mb-0">⚠ @error</p>
+        }
+    </div>
+}
+
+<div class="card shadow-sm">
+    <div class="card-body p-4">
+        <form asp-controller="CreditCard" asp-action="CreateCard" method="post">
+            <input type="hidden" asp-for="ClientId" />
+            <input type="hidden" asp-for="ClientName" />
+
+            <div class="mb-3">
+                <label asp-for="CreditLimit" class="form-label fw-semibold">Límite de Crédito</label>
+                <input asp-for="CreditLimit" class="form-control" placeholder="0.00" />
+                <span asp-validation-for="CreditLimit" class="text-danger small"></span>
+            </div>
+
+            <div class="d-flex justify-content-end mt-3">
+                <a asp-controller="CreditCard" asp-action="AssignCard" class="btn btn-outline-secondary me-2">← Volver</a>
+                <button type="submit" class="btn text-white" style="background: linear-gradient(135deg, #1a3a6b, #2196F3);">
+                    Asignar Tarjeta
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
